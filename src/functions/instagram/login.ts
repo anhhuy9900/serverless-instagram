@@ -3,9 +3,11 @@ import { formatHTMLResponse } from '@libs/api-gateway';
 import { middyfy } from '@libs/lambda';
 
 const login: Handler = async (_event) => {
-  return formatHTMLResponse(`<a href="https://api.instagram.com/oauth/authorize
-  ?client_id=1441635086687284&redirect_uri=https://localhost:4001/dev/instagram/authenticate/&scope=user_profile,user_media
-&response_type=code">Login</a>`);
+  console.log('process.env: ', process.env);
+  const { API_AUTHENTICATE_URL, CALLBACK_URL, CLIENT_FB_APP_ID } = process.env;
+
+  return formatHTMLResponse(`<a href="${API_AUTHENTICATE_URL}
+  ?client_id=${CLIENT_FB_APP_ID}&redirect_uri=${CALLBACK_URL}&scope=user_profile,user_media,instagram_basic,instagram_manage_insights&response_type=code">Login</a>`);
 };
 
 export const main = middyfy(login);

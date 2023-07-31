@@ -5,7 +5,7 @@ import functions from '@functions/instagram';
 const serverlessConfiguration: AWS = {
   service: 'serverless-instagram',
   frameworkVersion: '3',
-  plugins: ['serverless-esbuild', 'serverless-offline'],
+  plugins: ['serverless-esbuild', 'serverless-offline', 'serverless-dotenv-plugin'],
   provider: {
     name: 'aws',
     runtime: 'nodejs16.x',
@@ -36,6 +36,7 @@ const serverlessConfiguration: AWS = {
       httpsProtocol: "cert"
     }
   },
+  useDotenv: true
 };
 
 module.exports = serverlessConfiguration;
