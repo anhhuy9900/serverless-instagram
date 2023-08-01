@@ -1,41 +1,33 @@
-import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/api-gateway';
-import { formatJSONResponse } from '@libs/api-gateway';
-import { middyfy } from '@libs/lambda';
-import axios from 'axios';
+import type { ValidatedEventAPIGatewayProxyEvent } from '../../libs/api-gateway';
+import { formatJSONResponse } from '../../libs/api-gateway';
+import { middyfy } from '../../libs/lambda';
 import schema from './schema';
+import { InstagramService } from '../services/instagram.service';
 
 // https://developers.facebook.com/docs/instagram-basic-display-api/reference/oauth-authorize
 const authenticate: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-  console.log('event: ', event);
-
+  //console.log('authenticate - event: ', event);
+  let message = null;
+  let data = null;
   try {
+    const service = new InstagramService();
     const { code } = event.queryStringParameters;
-    const { API_URL, CLIENT_ID, CLIENT_SECRET, CALLBACK_URL } = process.env;
-    const { data } = await axios.post(`${API_URL}/oauth/access_token`, 
-      {
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        grant_type: 'authorization_code',
-        code,
-        redirect_uri: CALLBACK_URL
-      },
-      {
-        headers : {
-          "Content-Type" : "application/x-www-form-urlencoded"
-        },
-      }
-    );
-    return formatJSONResponse({
-      message: `Get code from Oauth Instagram API`,
-      data: {
-        code, 
-        ...data
-      }
-    });
+    const result = await service.getLongLiveTokenByCode(code);
+    
+    data = {
+      code, 
+      ...result
+    }
+    message = `Get code from Oauth Instagram API`;
+
   } catch(err) {
     console.error('getAccessToken - err: ', err);
+    message = JSON.stringify(err);
+    
+  } finally {
     return formatJSONResponse({
-      message: JSON.stringify(err),
+      message: `Get code from Oauth Instagram API`,
+      data
     });
   }
 };

@@ -1,6 +1,6 @@
 
-import { formatJSONResponse } from '@libs/api-gateway';
-import { middyfy } from '@libs/lambda';
+import { formatJSONResponse } from '../../libs/api-gateway';
+import { middyfy } from '../../libs/lambda';
 import axios from 'axios';
 import type { APIGatewayProxyHandler} from "aws-lambda";
 
@@ -10,7 +10,7 @@ const getUserInfo: APIGatewayProxyHandler = async (event) => {
   try {
     const { API_GRAPH_URL } = process.env;
     const { accessToken } = event.queryStringParameters;
-
+    
     const { data } = await axios.get(`${API_GRAPH_URL}/me`, {
       params: {
         fields: ['id', 'username'].join(','),
@@ -19,13 +19,13 @@ const getUserInfo: APIGatewayProxyHandler = async (event) => {
     });
 
     result = data;
-
+  
   } catch(err) {
-    console.error('getUserInfo - err: ', JSON.stringify(err.response.data));
+    console.error('getUserInfo - err: ', JSON.stringify(err));
   }
 
   return formatJSONResponse({
-    data: result
+    ...result
   });
 };
 
