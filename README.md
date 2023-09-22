@@ -28,6 +28,15 @@ In order to test the hello function locally, run the following command:
 
 Check the [sls invoke local command documentation](https://www.serverless.com/framework/docs/providers/aws/cli-reference/invoke-local/) for more information.
 
+## Testing
+
+You can use different ways to run tests, and in this project, we're using JEST library to write tests for features
+- To run test, please run CLI
+```
+    npm run test 
+```
+the CLI will run all file with extension .test
+
 ### Remotely
 
 Copy and replace your `url` - found in Serverless `deploy` command output - and `name` parameter in the following `curl` command in your terminal or in Postman to test your newly deployed application.
