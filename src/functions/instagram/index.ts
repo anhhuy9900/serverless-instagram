@@ -3,7 +3,7 @@ import { handlerPath } from '@libs/handler-resolver';
 
 export default {
   test: {
-    handler: `${handlerPath(__dirname)}/test.main`,
+    handler: `${handlerPath(__dirname)}/runTest.main`,
     timeout: 15
   },
   login: {
